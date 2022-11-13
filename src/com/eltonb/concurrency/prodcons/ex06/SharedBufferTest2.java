@@ -1,0 +1,50 @@
+// Fig 23.17: SharedBufferTest2.java
+// Two threads correctly manipulating a synchronized buffer.
+package com.eltonb.concurrency.prodcons.ex06;
+
+import com.eltonb.concurrency.prodcons.base.Buffer;
+import com.eltonb.concurrency.prodcons.base.Consumer;
+import com.eltonb.concurrency.prodcons.base.Producer;
+
+import java.util.concurrent.ExecutorService;
+import java.util.concurrent.Executors;
+import java.util.concurrent.TimeUnit;
+
+public class SharedBufferTest2
+{
+   public static void main(String[] args) throws InterruptedException
+   {
+      // create a CachedThreadPool
+      ExecutorService executorService = Executors.newCachedThreadPool();
+
+      // create SynchronizedBuffer to store ints
+      Buffer sharedLocation = new SynchronizedBuffer();
+
+      System.out.printf("%-40s%s\t\t%s%n%-40s%s%n%n", "Operation", 
+         "Buffer", "Occupied", "---------", "------\t\t--------");
+
+      // execute the Producer and Consumer tasks
+      executorService.execute(new Producer(sharedLocation, 0));
+      executorService.execute(new Consumer(sharedLocation, 0));
+
+      executorService.shutdown();
+      executorService.awaitTermination(1, TimeUnit.MINUTES); 
+   }
+} // end class SharedBufferTest2
+
+
+
+/**************************************************************************
+ * (C) Copyright 1992-2015 by Deitel & Associates, Inc. and               *
+ * Pearson Education, Inc. All Rights Reserved.                           *
+ *                                                                        *
+ * DISCLAIMER: The authors and publisher of this book have used their     *
+ * best efforts in preparing the book. These efforts include the          *
+ * development, research, and testing of the theories and programs        *
+ * to determine their effectiveness. The authors and publisher make       *
+ * no warranty of any kind, expressed or implied, with regard to these    *
+ * programs or to the documentation contained in these books. The authors *
+ * and publisher shall not be liable in any event for incidental or       *
+ * consequential damages in connection with, or arising out of, the       *
+ * furnishing, performance, or use of these programs.                     *
+ *************************************************************************/
